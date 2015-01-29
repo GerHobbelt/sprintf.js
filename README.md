@@ -1,4 +1,9 @@
 # sprintf.js
+
+This is a fork of [sprintf.js](https://github.com/alexei/sprintf.js) library by [Alexandru Marasteanu](http://alexei.ro/) with [component](http://component.github.io)-compatibility twist.
+
+--
+
 **sprintf.js** is a complete open source JavaScript sprintf implementation for the *browser* and *node.js*.
 
 Its prototype is simple:

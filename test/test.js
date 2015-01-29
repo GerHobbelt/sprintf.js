@@ -1,5 +1,5 @@
 var assert = require("assert"),
-    sprintfjs = require("../src/sprintf.js"),
+    sprintfjs = require("../lib/sprintf.js"),
     sprintf = sprintfjs.sprintf,
     vsprintf = sprintfjs.vsprintf
 
