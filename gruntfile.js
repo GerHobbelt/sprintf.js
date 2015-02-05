@@ -12,10 +12,6 @@ module.exports = function(grunt) {
                     {
                         src: "src/sprintf.js",
                         dest: "dist/sprintf.min.js"
-                    },
-                    {
-                        src: "src/angular-sprintf.js",
-                        dest: "dist/angular-sprintf.min.js"
                     }
                 ]
             }
@@ -27,10 +23,10 @@ module.exports = function(grunt) {
                 tasks: ["uglify"]
             }
         }
-    })
+    });
 
-    grunt.loadNpmTasks("grunt-contrib-uglify")
-    grunt.loadNpmTasks("grunt-contrib-watch")
+    grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks("grunt-contrib-watch");
 
-    grunt.registerTask("default", ["uglify", "watch"])
-}
+    grunt.registerTask("default", ["uglify", "watch"]);
+};

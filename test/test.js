@@ -65,7 +65,7 @@ describe("sprintfjs", function() {
 
     })
 
-    it("should return formated strings for callbacks", function() {
+    it("should return formatted strings for callbacks", function() {
         assert.equal("foobar", sprintf("%s", function() { return "foobar" }))
         assert.equal(Date.now(), sprintf("%s", Date.now)) // should pass...
     })
