@@ -14,6 +14,7 @@ describe("sprintfjs", function() {
         assert.equal("2", sprintf("%i", "2"))
         assert.equal("2e+0", sprintf("%e", 2))
         assert.equal("2", sprintf("%u", 2))
+        assert.equal("2", sprintf("%u", "2"))
         assert.equal("4294967294", sprintf("%u", -2))
         assert.equal("2.2", sprintf("%f", 2.2))
         assert.equal("10", sprintf("%o", 8))
@@ -47,6 +48,9 @@ describe("sprintfjs", function() {
         // padding
         assert.equal("-0002", sprintf("%05d", -2))
         assert.equal("-0002", sprintf("%05i", -2))
+        assert.equal("12345", sprintf("%03d", 12345))
+        assert.equal("12345", sprintf("%03i", 12345))
+        assert.equal("12345", sprintf("%03u", 12345))
         assert.equal("    <", sprintf("%5s", "<"))
         assert.equal("0000<", sprintf("%05s", "<"))
         assert.equal("____<", sprintf("%'_5s", "<"))
@@ -62,7 +66,6 @@ describe("sprintfjs", function() {
         assert.equal("2.3", sprintf("%.1f", 2.345))
         assert.equal("xxxxx", sprintf("%5.5s", "xxxxxx"))
         assert.equal("    x", sprintf("%5.1s", "xxxxxx"))
-
     })
 
     it("should return formatted strings for callbacks", function() {
