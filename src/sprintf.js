@@ -30,7 +30,7 @@
 			i, k, match, pad, pad_character, pad_length, 
 			is_positive = true, 
 			sign = "",
-			arglen = false, argprec = false;
+			arglen = false, argprec = false, arg_left_align = false;
 
 		for ( i = 0; i < tree_length; i++ ) {
 			node_type = get_type( parse_tree[i] );
@@ -50,6 +50,10 @@
 					if (match[9][0] === '*') { // precision argument
 						argprec = +argv[cursor++];
 					}
+				}
+				if ( match[5] || arglen < 0 ) {
+					arg_left_align = true;
+					arglen = Math.abs(arglen);
 				}
 				if ( match[2] ) { // keyword argument
 					arg = argv[cursor];
@@ -122,7 +126,7 @@
 				pad_character = match[4] ? match[4] === "0" ? "0" : match[4].charAt( 1 ) : " ";
 				pad_length = arglen - (sign + arg).length;
 				pad = arglen !== false ? (pad_length > 0 ? str_repeat( pad_character, pad_length ) : "") : "";
-				output[output.length] = match[5] ? sign + arg + pad : (pad_character === "0" ? sign + pad + arg : pad + sign + arg);
+				output[output.length] = arg_left_align ? sign + arg + pad : (pad_character === "0" ? sign + pad + arg : pad + sign + arg);
 			}
 		}
 		return output.join( "" );
