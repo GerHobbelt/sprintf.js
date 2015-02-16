@@ -49,7 +49,7 @@
 				}
 
 				if ( re.not_string.test( match[8] ) && (get_type( arg ) != "number" && isNaN( arg )) ) {
-					throw new TypeError( sprintf( "[sprintf] expecting number but found %s", get_type( arg ) ) )
+					throw new TypeError( sprintf( "[sprintf] expecting number but found %s", get_type( arg ) ) );
 				}
 
 				if ( re.number.test( match[8] ) ) {
