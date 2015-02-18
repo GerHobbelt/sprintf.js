@@ -71,6 +71,7 @@
 					arg = argv[cursor++];
 				}
 
+				// compute functions into their argument value
 				if ( get_type( arg ) === "function" ) {
 					arg = arg();
 				}
