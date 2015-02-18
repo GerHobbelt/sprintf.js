@@ -28,9 +28,9 @@
 			arg, 
 			output = [], 
 			i, k, match, pad, pad_character, pad_length, 
-			is_positive = true, 
-			sign = "",
-			arglen = false, argprec = false, arg_left_align = false;
+			is_positive, 
+			sign,
+			arglen, argprec, arg_left_align;
 
 		for ( i = 0; i < tree_length; i++ ) {
 			node_type = get_type( parse_tree[i] );
@@ -38,6 +38,12 @@
 				output[output.length] = parse_tree[i];
 			}
 			else if ( node_type === "array" ) {
+				is_positive = true;
+				sign = "";
+				arglen = false;
+				argprec = false; 
+				arg_left_align = false;
+
 				match = parse_tree[i]; // convenience purposes only
 				if (match[6]) {
 					arglen = +match[6];
@@ -51,6 +57,7 @@
 						argprec = +argv[cursor++];
 					}
 				}
+				//output[output.length] = "{M:" + match[5] + ":L:" + arglen + ":P:" + argprec + "}";
 				if ( match[5] || arglen < 0 ) {
 					arg_left_align = true;
 					arglen = Math.abs(arglen);
@@ -128,6 +135,7 @@
 				pad_length = arglen - (sign + arg).length;
 				pad = arglen !== false ? (pad_length > 0 ? str_repeat( pad_character, pad_length ) : "") : "";
 				output[output.length] = arg_left_align ? sign + arg + pad : (pad_character === "0" ? sign + pad + arg : pad + sign + arg);
+				//output[output.length] = ":I:" + arg_left_align + ":S:" + sign + ":A:" + arg + ":P:" + pad + ":C:" + pad_character + ":";
 			}
 		}
 		return output.join( "" );
