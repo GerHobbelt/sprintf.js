@@ -92,13 +92,13 @@
 						break;
 					case "d":
 					case "i":
-						arg = parseInt( arg, 10 );
+						arg = parseInt( arg, 10 ).toString();
 						break;
 					case "e":
 						arg = argprec !== false ? arg.toExponential( argprec ) : arg.toExponential();
 						break;
 					case "f":
-						arg = argprec !== false ? parseFloat( arg ).toFixed( argprec ) : parseFloat( arg );
+						arg = argprec !== false ? parseFloat( arg ).toFixed( argprec ) : parseFloat( arg ).toString();
 						break;
 					case "o":
 						arg = arg.toString( 8 );
@@ -107,7 +107,7 @@
 						arg = ((arg = String( arg )) && argprec !== false ? arg.substring( 0, argprec ) : arg);
 						break;
 					case "u":
-						arg = arg >>> 0;
+						arg = (arg >>> 0).toString();
 						break;
 					case "x":
 						arg = arg.toString( 16 );
