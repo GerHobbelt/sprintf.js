@@ -23,6 +23,7 @@ describe("sprintfjs", function() {
         assert.equal("FF", sprintf("%X", 255));
         assert.equal("Polly wants a cracker", sprintf("%2$s %3$s a %1$s", "cracker", "Polly", "wants"));
         assert.equal("Hello world!", sprintf("Hello %(who)s!", {"who": "world"}));
+        assert.equal("I don't have alphanumberic char after closing brace!", sprintf("I don't have alphanumberic char after closing %(what)!", {"what": "brace"}));
     });
 
     it("should return formated strings for complex placeholders", function() {
