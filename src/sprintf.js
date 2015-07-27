@@ -34,7 +34,7 @@
           return formatter.sprintf.apply(null, arguments);
         };
       });
-    angular.module('sprintf.fmt', ['sprintf'])
+    angular.module('sprintf.fmt', ['sprintf.filter'])
       .filter('fmt', ['$filter', function($filter) {
         return $filter('sprintf');
       }]);
