@@ -1,10 +1,12 @@
 (function ( window ) {
 	var re = {
 		not_string: /[^s]/,
-		number: /[dief]/,
+        number: /[diefg]/,
+        json: /[j]/,
+        not_json: /[^j]/,
 		text: /^[^\x25]+/,
 		modulo: /^\x25{2}/,
-		placeholder: /^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+|\*(?:([1-9]\d*)\$|\(([^\)]+)\))?)?(?:\.(\d+|\*(?:([1-9]\d*)\$|\(([^\)]+)\))?))?([b-fiosuxX])/,
+		placeholder: /^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+|\*(?:([1-9]\d*)\$|\(([^\)]+)\))?)?(?:\.(\d+|\*(?:([1-9]\d*)\$|\(([^\)]+)\))?))?([b-gfijosuxX])/,
 		//                                                                                                                         11111111       111111 99999   11111111111      
 		//                     11111111       222222      33   4444444   5   666666666 77777777 66666 888888 6666        999999999 00000000 99999 111111 99999   22222222222
 		key: /^([a-z_][a-z_\d]*)/i,
@@ -83,7 +85,7 @@
 					arg = arg();
 				}
 
-				if ( re.not_string.test( match[12] ) && (get_type( arg ) !== "number" && isNaN( arg )) ) {
+				if ( re.not_string.test( match[12] ) && re.not_json.test(match[8]) && (get_type( arg ) !== "number" && isNaN( arg )) ) {
 					throw new TypeError( sprintf( "[sprintf] expecting number but found %s", get_type( arg ) ) );
 				}
 
@@ -102,11 +104,17 @@
 					case "i":
 						arg = parseInt( arg, 10 ).toString();
 						break;
+                    case "j":
+                        arg = JSON.stringify(arg, null, arglen ? parseInt(arglen) : 0);
+                        break;
 					case "e":
 						arg = argprec !== false ? arg.toExponential( argprec ) : arg.toExponential();
 						break;
 					case "f":
 						arg = argprec !== false ? parseFloat( arg ).toFixed( argprec ) : parseFloat( arg ).toString();
+                        break;
+                    case "g":
+                        arg = argprec !== false ? parseFloat(arg).toPrecision(argprec) : parseFloat(arg).toString();
 						break;
 					case "o":
 						arg = arg.toString( 8 );
@@ -124,18 +132,23 @@
 						arg = arg.toString( 16 ).toUpperCase();
 						break;
 				}
-				if ( re.number.test( match[12] ) && (! is_positive || match[3]) ) {
-					sign = is_positive ? "+" : "-";
-					arg = arg.toString().replace( re.sign, "" );
-				}
-				else {
-					sign = "";
-				}
-				pad_character = match[4] ? match[4] === "0" ? "0" : match[4].charAt( 1 ) : " ";
-				pad_length = arglen - (sign + arg).length;
-				pad = arglen !== false ? (pad_length > 0 ? str_repeat( pad_character, pad_length ) : "") : "";
-				output[output.length] = arg_left_align ? sign + arg + pad : (pad_character === "0" ? sign + pad + arg : pad + sign + arg);
-				//output[output.length] = ":I:" + arg_left_align + ":S:" + sign + ":A:" + arg + ":P:" + pad + ":C:" + pad_character + ":";
+                if (re.json.test(match[8])) {
+                    output[output.length] = arg
+                }
+                else {
+    				if ( re.number.test( match[12] ) && (! is_positive || match[3]) ) {
+    					sign = is_positive ? "+" : "-";
+    					arg = arg.toString().replace( re.sign, "" );
+    				}
+    				else {
+    					sign = "";
+    				}
+    				pad_character = match[4] ? match[4] === "0" ? "0" : match[4].charAt( 1 ) : " ";
+    				pad_length = arglen - (sign + arg).length;
+    				pad = arglen !== false ? (pad_length > 0 ? str_repeat( pad_character, pad_length ) : "") : "";
+    				output[output.length] = arg_left_align ? sign + arg + pad : (pad_character === "0" ? sign + pad + arg : pad + sign + arg);
+    				//output[output.length] = ":I:" + arg_left_align + ":S:" + sign + ":A:" + arg + ":P:" + pad + ":C:" + pad_character + ":";
+    			}
 			}
 		}
 		return output.join( "" );
