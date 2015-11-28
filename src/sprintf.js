@@ -32,7 +32,7 @@
 			i, k, match, pad, pad_character, pad_length, 
 			is_positive, 
 			sign,
-			arglen, argprec, arg_left_align;
+			arglen, argprec, arg_left_align, argtype;
 
 		for ( i = 0; i < tree_length; i++ ) {
 			match = parse_tree[i]; // convenience purposes only
@@ -85,8 +85,14 @@
 					arg = arg();
 				}
 
-				if ( re.not_string.test( match[12] ) && re.not_json.test(match[8]) && (get_type( arg ) !== "number" && isNaN( arg )) ) {
-					throw new TypeError( sprintf( "[sprintf] expecting number but found %s", get_type( arg ) ) );
+				if ( re.not_string.test( match[12] ) && re.not_json.test(match[8]) ) {
+					argtype = get_type( arg );
+					if ( argtype === "number" && !isFinite( arg ) ) {
+						argtype = String( arg );
+					}
+					if ( argtype !== "number" ) {
+						throw new TypeError( sprintf( "[sprintf] expecting number but found %s", argtype ) );
+					}
 				}
 
 				if ( re.number.test( match[12] ) ) {
@@ -114,13 +120,14 @@
 						arg = argprec !== false ? parseFloat( arg ).toFixed( argprec ) : parseFloat( arg ).toString();
                         break;
                     case "g":
-                        arg = argprec !== false ? parseFloat(arg).toPrecision(argprec) : parseFloat(arg).toString();
+                        arg = argprec !== false ? parseFloat( arg ).toPrecision( argprec ) : parseFloat( arg ).toString();
 						break;
 					case "o":
 						arg = arg.toString( 8 );
 						break;
 					case "s":
-						arg = ((arg = String( arg )) && argprec !== false ? arg.substring( 0, argprec ) : arg);
+					    arg = String( arg );
+						arg = (arg && argprec !== false ? arg.substring( 0, argprec ) : arg);
 						break;
 					case "u":
 						arg = (arg >>> 0).toString();
@@ -133,7 +140,7 @@
 						break;
 				}
                 if (re.json.test(match[8])) {
-                    output[output.length] = arg
+                    output[output.length] = arg;
                 }
                 else {
     				if ( re.number.test( match[12] ) && (! is_positive || match[3]) ) {
