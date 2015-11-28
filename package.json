@@ -2,6 +2,7 @@
     "name": "sprintf-js",
     "version": "1.0.3",
     "description": "JavaScript sprintf implementation",
+    "keywords": ["sprintf", "string", "formatting"],
     "author": "Alexandru Marasteanu <hello@alexei.ro> (http://alexei.ro/)",
     "main": "src/sprintf.js",
     "scripts": {
