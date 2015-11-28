@@ -20,7 +20,7 @@
 		if ( ! ( cache[key] && cache.hasOwnProperty( key ) ) ) {
 			cache[key] = sprintf.parse( key );
 		}
-		return sprintf.format.call( null, cache[key], arguments );
+		return sprintf.format( cache[key], arguments );
 	}
 
 	sprintf.format = function ( parse_tree, argv ) {
@@ -35,9 +35,10 @@
 			arglen, argprec, arg_left_align;
 
 		for ( i = 0; i < tree_length; i++ ) {
-			node_type = get_type( parse_tree[i] );
+			match = parse_tree[i]; // convenience purposes only
+			node_type = get_type( match );
 			if ( node_type === "string" ) {
-				output[output.length] = parse_tree[i];
+				output[output.length] = match;
 			}
 			else if ( node_type === "array" ) {
 				is_positive = true;
@@ -46,7 +47,6 @@
 				argprec = false; 
 				arg_left_align = false;
 
-				match = parse_tree[i]; // convenience purposes only
 				if (match[6]) {
 					arglen = +match[6];
 					if (match[6][0] === '*') { // length argument
@@ -211,9 +211,9 @@
 		return parse_tree;
 	};
 
-	var vsprintf = function ( fmt, argv, _argv ) {
-		_argv = (argv || []).slice( 0 );
-		_argv.splice( 0, 0, fmt );
+	var vsprintf = function ( fmt, argv ) {
+		var _argv = (argv || []).slice( 0 );
+		_argv.unshift( fmt );
 		return sprintf.apply( null, _argv );
 	};
 
