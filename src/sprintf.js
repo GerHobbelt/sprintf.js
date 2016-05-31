@@ -1,14 +1,22 @@
+/* globals window, exports, define */
+
 (function ( window ) {
-	var re = {
-		not_string: /[^s]/,
+    'use strict'
+
+    var re = {
+        not_string: /[^s]/,
+        not_bool: /[^t]/,
+        not_type: /[^T]/,
+        not_primitive: /[^v]/,
         number: /[diefg]/,
+        numeric_arg: /bcdiefguxX/,
         json: /[j]/,
         not_json: /[^j]/,
 		text: /^[^\x25]+/,
 		modulo: /^\x25{2}/,
-		placeholder: /^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+|\*(?:([1-9]\d*)\$|\(([^\)]+)\))?)?(?:\.(\d+|\*(?:([1-9]\d*)\$|\(([^\)]+)\))?))?([b-gfijosuxX])/,
-		//                                                                                                                         11111111       111111 99999   11111111111      
-		//                     11111111       222222      33   4444444   5   666666666 77777777 66666 888888 6666        999999999 00000000 99999 111111 99999   22222222222
+		placeholder: /^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+|\*(?:([1-9]\d*)\$|\(([^\)]+)\))?)?(?:\.(\d+|\*(?:([1-9]\d*)\$|\(([^\)]+)\))?))?([b-gfijostTuvxX])/,
+		//                                                                                                                         11111111       111111 99999   1111111111111111      
+		//                     11111111       222222      33   4444444   5   666666666 77777777 66666 888888 6666        999999999 00000000 99999 111111 99999   2222222222222222
 		key: /^([a-z_][a-z_\d]*)/i,
 		key_access: /^\.([a-z_][a-z_\d]*)/i,
 		index_access: /^\[(\d+)\]/,
@@ -129,9 +137,21 @@
 					    arg = String( arg );
 						arg = (arg && argprec !== false ? arg.substring( 0, argprec ) : arg);
 						break;
+                    case 't':
+                        arg = String(!!arg)
+                        arg = (argprec !== false ? arg.substring(0, argprec) : arg)
+                    break
+                    case 'T':
+                        arg = get_type(arg)
+                        arg = (argprec !== false ? arg.substring(0, argprec) : arg)
+                    break
 					case "u":
 						arg = (arg >>> 0).toString();
 						break;
+                    case 'v':
+                        arg = arg.valueOf()
+                        arg = (argprec !== false ? arg.substring(0, argprec) : arg)
+                    break
 					case "x":
 						arg = arg.toString( 16 );
 						break;
